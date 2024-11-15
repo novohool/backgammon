@@ -2,6 +2,8 @@ import pygame
 import time
 from enum import Enum
 from typing import Tuple, List, Optional
+from functools import lru_cache
+import threading
 
 # Game constants
 SCREEN_WIDTH = 800  
@@ -109,7 +111,7 @@ class Board:
         if self.last_move and self.check_win(self.last_move):
             return self.last_move.color
         return None
-    
+
 class Difficulty(Enum):
     EASY = 1
     MEDIUM = 2
@@ -305,7 +307,6 @@ class AIPlayer:
                     total_score += weights["2"]  # 眠二
         
         return total_score
-
 
 class SoundManager:
     def __init__(self):
