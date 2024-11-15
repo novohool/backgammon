@@ -4,6 +4,7 @@ from enum import Enum
 from typing import Tuple, List, Optional
 from functools import lru_cache
 import threading
+import random
 
 # Game constants
 SCREEN_WIDTH = 800  
@@ -132,6 +133,7 @@ class AIPlayer:
             Difficulty.MEDIUM: 3,
             Difficulty.HARD: 4
         }[difficulty]
+        self.history_table = [[0 for _ in range(BOARD_SIZE)] for _ in range(BOARD_SIZE)]
     
     def get_move(self, board: 'Board') -> Tuple[int, int]:
         """使用Alpha-Beta搜索获取最佳落子位置"""
@@ -210,7 +212,7 @@ class AIPlayer:
         for x in range(board.size):
             for y in range(board.size):
                 if board.is_valid_move(x, y) and self._has_neighbor(board, x, y):
-                    score = self._evaluate_position(x, y, board, WHITE)
+                    score = self._evaluate_position(x, y, board, WHITE) + self.history_table[x][y]
                     valid_moves.append((score, (x, y)))
         
         # 按评分排序，返回位置坐标
